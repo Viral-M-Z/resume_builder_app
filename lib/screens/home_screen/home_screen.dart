@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:resume_builder_app/constants/strings/strings.dart';
 import 'package:resume_builder_app/screens/resume_information_screens/resume_information_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key,required this.title}) : super(key: key);
@@ -73,17 +76,34 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // _incrementResumeCnt();
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            backgroundColor: Colors.red[700],
+            onPressed: () async {
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const PersonalDetailScreen();
-          }));
+              var databasesPath = await getDatabasesPath();
+              String path = join(databasesPath, DATABASE_NAME);
+              await deleteDatabase(path);
 
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+            },
+            tooltip: 'Decrement',
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 12,),
+          FloatingActionButton(
+            onPressed: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const PersonalDetailScreen();
+              }));
+
+            },
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

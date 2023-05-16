@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:resume_builder_app/constants/strings/strings.dart';
+import 'package:resume_builder_app/screens/resume_information_screens/employment_history.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SocialMediaLinks extends StatefulWidget {
@@ -15,9 +17,15 @@ class _SocialMediaLinksState extends State<SocialMediaLinks> {
   final _formKey = GlobalKey<FormState>();
 
   /// Social Media Links
-  TextEditingController linkedIn = TextEditingController();
-  TextEditingController skype = TextEditingController();
-  TextEditingController github = TextEditingController();
+  TextEditingController linkedIn = TextEditingController(
+    text: "https://www.linkedin.com/feed/"
+  );
+  TextEditingController skype = TextEditingController(
+    text: "live:.cid.807c3277e5c20726"
+  );
+  TextEditingController github = TextEditingController(
+    text: "https://github.com/Viral-M-Z/"
+  );
 
   @override
   void initState() {
@@ -27,7 +35,7 @@ class _SocialMediaLinksState extends State<SocialMediaLinks> {
   }
 
   _openDB() async {
-    var db = await openDatabase('resumedb.db');
+    var db = await openDatabase(DATABASE_NAME);
     await db.close();
   }
 
@@ -130,15 +138,26 @@ class _SocialMediaLinksState extends State<SocialMediaLinks> {
               onPressed: () async {
 
                 var databasesPath = await getDatabasesPath();
-                final path = join(databasesPath, 'resumedb.db');
+                final path = join(databasesPath, DATABASE_NAME);
+
                 Database database = await openDatabase(
                     path, version: 1,
                     onCreate: (Database db, int version) async {
                       await db.execute(
-                          'CREATE TABLE social_media(linkedin TEXT,rid INTEGER, email TEXT, firstname TEXT, lastname TEXT, jobrole TEXT, phone INTEGER, profile TEXT)'
+                        'CREATE TABLE social_media(linkedin TEXT,rid INTEGER FOREIGN KEY, skype TEXT, github TEXT,)'
                       );
                     }
                 );
+
+                await database.transaction((txn) async {
+                  int id1 = await txn.rawInsert(
+                    'INSERT INTO social_media(linkedin, rid, skype, github) VALUES("${linkedIn.text.toString()}", 1, "${skype.text.toString()}", "${github.text.toString()}")');
+                    print('inserted1: $id1');
+                });
+
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const EmploymentHistory();
+                }));
 
               },
               child: const Text(

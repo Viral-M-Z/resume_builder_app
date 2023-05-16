@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:resume_builder_app/constants/strings/strings.dart';
 import 'package:resume_builder_app/screens/resume_information_screens/social_media_links.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -221,9 +222,10 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      // Get a location using getDatabasesPath
+
                       var databasesPath = await getDatabasesPath();
-                      final path = join(databasesPath, 'resumedb.db');
+                      final path = join(databasesPath, DATABASE_NAME);
+
                       Database database = await openDatabase(
                         path, version: 1,
                         onCreate: (Database db, int version) async {
