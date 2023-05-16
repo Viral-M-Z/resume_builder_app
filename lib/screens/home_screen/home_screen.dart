@@ -51,10 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController certiScore = TextEditingController();
 
   @override
-  void initState() async {
+  void initState() {
     // TODO: implement initState
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("resumeCount", 0);
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.setInt("resumeCount", 0);
     super.initState();
   }
 
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _incrementResumeCnt();
+          // _incrementResumeCnt();
 
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const PersonalDetailScreen();
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
 
-            const SizedBox(height: 12.0,),
+
 
 
 
